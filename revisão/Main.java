@@ -1,47 +1,37 @@
+import utils.*;
+
 public class Main {
     public static void main(String[] args) {
+        final int LIMITE_INFERIOR = 100;
+        final int LIMITE_SUPERIOR = 1_000;
+        final int INCREMENTO = 50;
 
-        final int LIMITE_INFERIOR = 5_000;
-        final int LIMITE_SUPERIOR = 6000;
-        final int INCREMENTO = 100;
+        int[] meuArray;
+        int[] meuArrayBubble;
 
-        int[] myArray;
-        int[] myArrayBubble;
-        int[] myArrayInsertion;
-        int[] myArrayQuick;
-        int[] myArrayMerge;
+        System.out.println("n;bubble");
+        for (int n = LIMITE_INFERIOR; n <= LIMITE_SUPERIOR; n+=INCREMENTO) {
+            meuArray = new int[n];
+            meuArrayBubble = new int[n];
 
-        System.out.println("N;BubbleSort;InsertionSort;QuickSort;MergeSort");
-        for (int n = LIMITE_INFERIOR; n <= LIMITE_SUPERIOR; n += INCREMENTO) {
-            myArray = new int[n];
-            myArrayBubble = new int[n];
-            myArrayInsertion = new int[n];
-            myArrayQuick = new int[n];
-            myArrayMerge = new int[n];
+            ArrayUtils.preencherArrayComValoresInteirosAleatorios(meuArray, 1_000_000, true);
 
-            ArrayUtils.preencherArrayComValoresInteirosAleatorios(myArray, LIMITE_SUPERIOR, false);
-
-            ArrayUtils.clonarArray(myArray, myArrayBubble);
-            ArrayUtils.clonarArray(myArray, myArrayInsertion);
-            ArrayUtils.clonarArray(myArray, myArrayQuick);
-            ArrayUtils.clonarArray(myArray, myArrayMerge);
+            ArrayUtils.clonarArray(meuArray, meuArrayBubble);
 
             BubbleSort bs = new BubbleSort();
-            bs.ordenar(myArrayBubble);
+            bs.ordenar(meuArrayBubble);
 
-            InsertionSort is = new InsertionSort();
-            is.ordenar(myArrayInsertion);
 
-            QuickSort qs = new QuickSort();
-            qs.ordenar(myArrayQuick);
+            System.out.println(n + ";" + bs.getOperacoes() );
 
-            MergeSort ms = new MergeSort();
-            ms.ordenar(myArrayMerge);
-
-            System.out.println(n + ";" + bs.getOperacoes() + ";" + is.getOperacoes() + ";" + qs.getOperacoes() + ";" + ms.getOperacoes());
-            
         }
+    }
 
-        System.out.println("Fim do programa");
+    public static void inverterArray(int[] a) {
+        for (int i = 0; i < a.length / 2; i++) {
+            int temp = a[i];
+            a[i] = a[a.length - 1];
+            a[a.length - 1] = temp;
+        }
     }
 }

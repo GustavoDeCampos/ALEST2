@@ -1,4 +1,4 @@
-package heap;
+package heapsort;
 
 import utils.ArrayUtils;
 
@@ -35,7 +35,7 @@ public class HeapMaximo {
     }
     private int filhoDireita(int posicao) {
         int p = posicao * 2 + 2;
-        if(p>=tamanho) p = HeapMaximo.POSICAO_INVALIDA;
+        if(p>=tamanho) p = POSICAO_INVALIDA;
         return p;
 
     }
@@ -43,10 +43,10 @@ public class HeapMaximo {
         //um array qualquer recebido no construtor pode nao ser um heap-maximo
         //nesse caso temos que transformar ele em um heap - heapify
         int ultimaPosicao = tamanho - 1;
-        int ultimoPai = ultimaPosicao / 2;
+        int ultimoPai = (ultimaPosicao - 1) / 2;
         for (int i = ultimoPai; i >= 0; i--) {
             ArrayUtils.imprimir(chaves);
-            sinkAfundar(i);
+            afundar(i);
         }
     }
     public int[] getChaves() {
@@ -66,10 +66,10 @@ public class HeapMaximo {
         int ultimaPosicaoPreenchida = this.tamanho;
         this.chaves[ultimaPosicaoPreenchida] = chave;
         this.tamanho++;
-        swimNadar(ultimaPosicaoPreenchida);
+        nadarSubindo(ultimaPosicaoPreenchida);
     }
     public void trocar(int posicaoA, int posicaoB) {
-        System.out.printf("   Trocando %d por %d.", chaves[posicaoA], chaves[posicaoB]);
+        //System.out.printf("   Trocando %d por %d.", chaves[posicaoA], chaves[posicaoB]);
         int temp = chaves[posicaoA];
         chaves[posicaoA] = chaves[posicaoB];
         chaves[posicaoB] = temp;
@@ -90,41 +90,40 @@ public class HeapMaximo {
         this.chaves[this.tamanho-1] = -1;
         this.tamanho = this.tamanho - 1;
 
-        System.out.println("Removido " + chaveMaxima);
+        //System.out.println("Removido " + chaveMaxima);
+        //ArrayUtils.imprimir(getChaves());
 
-        ArrayUtils.imprimir(getChaves());
         //inicia o ajuste afundando a nova raiz ate que o heap seja restaurado
-        sinkAfundar(0);
+        afundar(0);
         return chaveMaxima;
     }
-    private void sinkAfundar(int posicao) {
-        while(2*posicao+1 <= this.tamanho) {
 
-            int maior = posicao;
-            int filhoEsquerda = posicao*2 + 1;
-            int filhoDireita = posicao*2 + 2;
-
-            if(filhoEsquerda < tamanho && chaves[filhoEsquerda] > chaves[maior]) maior = filhoEsquerda;
-            if(filhoDireita < tamanho && chaves[filhoDireita] > chaves[maior]) maior = filhoDireita;
-
-            if(maior!=posicao) { //tem que trocar posicao pelo maior
-                trocar(posicao, maior);
-            }
-            ArrayUtils.imprimir(getChaves());
-            posicao = 2*posicao+1;
-
+    private void afundar(int posicao) {
+        int maior = posicao;
+        int fe = 2*posicao + 1;
+        int fd = 2*posicao + 2;
+        if(fe < tamanho && chaves[fe] > chaves[maior]) maior = fe;
+        if(fd < tamanho && chaves[fd] > chaves[maior]) maior = fd;
+        if(maior!=posicao) {
+            int temp = chaves[posicao];
+            chaves[posicao] = chaves[maior];
+            chaves[maior] = temp;
+            afundar(maior);
         }
     }
     private int maior(int posicao1, int posicao2) {
-        if(posicao1==HeapMaximo.POSICAO_INVALIDA) return posicao2;
-        if(posicao2==HeapMaximo.POSICAO_INVALIDA) return posicao1;
+        if(posicao1== POSICAO_INVALIDA) return posicao2;
+        if(posicao2== POSICAO_INVALIDA) return posicao1;
         if(chaves[posicao1]>=chaves[posicao2]) return posicao1;
         else return posicao2;
     }
-    private void swimNadar(int posicao) {
-        while(posicao > 0 && chaves[pai(posicao)] < chaves[posicao]) {
-            trocar(posicao, pai(posicao));
-            posicao = pai(posicao); //sobe na arvore
+    private void nadarSubindo(int posicao) {
+        int pai = (posicao-1)/2;
+        if(chaves[posicao]>chaves[pai]) {
+            int temp = chaves[posicao];
+            chaves[posicao] = chaves[pai];
+            chaves[pai] = temp;
+            nadarSubindo(pai);
         }
     }
     private void aumentarCapacidade() {
@@ -135,5 +134,14 @@ public class HeapMaximo {
         chaves = novoArray;
     }
 
+    public void imprimir() {
+        ArrayUtils.imprimir(chaves);
+    }
+    public boolean estaVazio() {
+        return tamanho == 0;
+    }
+    public int tamanho() {
+        return tamanho;
+    }
 
 }

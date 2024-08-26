@@ -2,7 +2,7 @@ package heap;
 
 public class App {
     public static void main(String[] args) {
-        HeapMaximo heap = new HeapMaximo();
+        HeapMaximo2 heap = new HeapMaximo2();
         heap.inserir(40);
         heap.inserir(32);
         heap.inserir(15);
